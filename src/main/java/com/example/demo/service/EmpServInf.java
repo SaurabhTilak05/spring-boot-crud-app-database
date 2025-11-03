@@ -8,4 +8,8 @@ public interface EmpServInf {
 
 	public boolean isSave(Employee employee);
 	public List<Employee> getEmployee();
+	public Employee searchEmp(int id);
+	public Employee updateEmp(int id, Employee emp);
+	public boolean isDelete(int id);
+	
 }
