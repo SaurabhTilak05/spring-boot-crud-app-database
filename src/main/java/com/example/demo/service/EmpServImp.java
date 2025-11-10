@@ -41,13 +41,13 @@ public class EmpServImp implements EmpServInf {
 	        }
 	}
 	@Override
-	public Employee searchEmp(int id) {
-		Employee emp=empRepo.searchEmp(id);
+	public List<Employee> searchEmp(String name) {
+		List<Employee> emp=empRepo.searchEmp(name);
 		if(emp!=null)
 		{
 			return emp;
 		}
-		throw new EmployeeNotFoundException("Employee Not Found of this Id:"+id);
+		throw new EmployeeNotFoundException("Employee Not Found of this Id:"+name);
 	}
 	@Override
 	public Employee updateEmp(int id, Employee emp) {
@@ -63,6 +63,12 @@ public class EmpServImp implements EmpServInf {
 	public boolean isDelete(int id) {
 		// TODO Auto-generated method stub
 		return empRepo.isDelete(id);
+	}
+	
+	@Override
+	public Employee getEmpByid(int id) {
+		Employee emp1=empRepo.getEmpByid(id);
+		return emp1;
 	}
 	
 	

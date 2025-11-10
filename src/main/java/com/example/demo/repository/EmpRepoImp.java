@@ -54,7 +54,42 @@ public class EmpRepoImp implements EmpRepoInf{
 	}
 
 	@Override
-	public Employee searchEmp(int id) {
+	public List<Employee> searchEmp(String name) {
+	    List<Employee> list = template.query(
+	        "SELECT * FROM employee WHERE name LIKE '%" + name + "%'",
+	        new RowMapper<Employee>() {
+	            @Override
+	            public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
+	                Employee e = new Employee();
+	                e.setId(rs.getInt("id"));
+	                e.setName(rs.getString("name"));
+	                e.setEmail(rs.getString("email"));
+	                e.setContact(rs.getString("contact"));
+	                e.setSalary(rs.getString("salary"));
+	                return e;
+	            }
+	        }
+	    );
+	    return list;
+	}
+
+
+	@Override
+	public Employee updateEmp(int id, Employee emp) {
+		
+		int value=template.update("UPDATE employee SET name = ?, email = ?, contact = ?, salary=?  WHERE id = ?", new Object[] {emp.getName(), emp.getEmail(),emp.getContact(),emp.getSalary(),id});
+		return value>0 ? emp:null;
+	
+	}
+
+	@Override
+	public boolean isDelete(int id) {
+		int value=template.update("delete from employee where id=?",+id);
+		return value>0 ?true:false;
+	}
+
+	@Override
+	public Employee getEmpByid(int id) {
 		List<Employee> list=template.query("select *from employee where id=?",new RowMapper<Employee>() {
 
 			@Override
@@ -69,23 +104,7 @@ public class EmpRepoImp implements EmpRepoInf{
 			}
 		}, id
 		);
-		return list.isEmpty() ? null : list.get(0);
-		
-		
-	}
-
-	@Override
-	public Employee updateEmp(int id, Employee emp) {
-		
-		int value=template.update("UPDATE employee SET name = ?, email = ?, contact = ?, salary=?  WHERE id = ?", new Object[] {emp.getName(), emp.getEmail(),emp.getContact(),emp.getSalary(),id});
-		return value>0 ? emp:null;
-	
-	}
-
-	@Override
-	public boolean isDelete(int id) {
-		int value=template.update("delete from employee where id=?",+id);
-		return value>0 ?true:false;
+		 return list.isEmpty() ? null : list.get(0);
 	}
 	
 }

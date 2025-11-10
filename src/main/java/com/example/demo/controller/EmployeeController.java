@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,16 +18,19 @@ import com.example.demo.service.*;
 
 @RestController
 @RequestMapping("/employee")
+@CrossOrigin
 public class EmployeeController {
 	
 	@Autowired
 	private EmpServImp empService;
 	
 	@PostMapping("/save")
-	public String isSave(@RequestBody Employee employee)
+	public Map<String,String> isSave(@RequestBody Employee employee)
 	{
 		boolean b=empService.isSave(employee);
-		return b ? "Employee saved successfully!" : "Failed to save employee!";
+		 Map<String, String> map = new HashMap<>();
+		    map.put("message", b ? "Employee saved successfully!" : "Failed to save employee!");
+		    return map;
 	}
 	
 	@GetMapping("/viewall")
@@ -34,10 +38,18 @@ public class EmployeeController {
 		return empService.getEmployee();
 	}
 
-	@GetMapping("/searchbyid/{id}")
-	public Employee getEmpById(@PathVariable("id") Integer id, @RequestBody Employee emp) {
+	@GetMapping("/searchbyname/{name}")
+	public List<Employee> getEmpById(@PathVariable("name") String name) {
 		
-		return empService.searchEmp(id);
+		return empService.searchEmp(name);
+	}
+	
+	
+	@GetMapping("/getById/{id}")
+	public Employee getEmployeeByid(@PathVariable("id") Integer id)
+	{
+		Employee em=empService.getEmpByid(id);
+		return em;
 	}
 	
 	@PutMapping("/updatebyid/{id}")
@@ -46,7 +58,7 @@ public class EmployeeController {
 		return emp1 ;
 	}
 	@DeleteMapping("/delbyid/{id}")
-	public String DeleteEmpById(@PathVariable("id") Integer id, @RequestBody Employee emp) {
+	public String DeleteEmpById(@PathVariable("id") Integer id) {
 		boolean b= empService.isDelete(id);
 		return b ? "Employee Delete successfully!" : "Failed to Delete employee!";
 	}

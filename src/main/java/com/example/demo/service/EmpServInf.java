@@ -8,7 +8,8 @@ public interface EmpServInf {
 
 	public boolean isSave(Employee employee);
 	public List<Employee> getEmployee();
-	public Employee searchEmp(int id);
+	public List<Employee> searchEmp(String name);
+	public Employee getEmpByid(int id);
 	public Employee updateEmp(int id, Employee emp);
 	public boolean isDelete(int id);
 	
